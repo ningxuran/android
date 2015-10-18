@@ -1,5 +1,6 @@
 package pku.ss.ningxuran.myweather;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Message;
@@ -22,8 +23,11 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.logging.LogRecord;
 
 import pku.ss.ningxuran.bean.TodayWeather;
@@ -31,8 +35,10 @@ import pku.ss.ningxuran.util.NetUtil;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private ImageView mUpdateBtn;
+    private ImageView mUpdateBtn,mCitySelect;
     private static final int UPDATE_TODAY_WEATHER = 1;
+    private static final String TAG = "MyApp";
+
 
     private TextView cityTv, timeTv, humidityTv,weekTv,pmDataTv, pmQualityTv, tempertureTv,
             climateTv, windTv;
@@ -45,7 +51,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         public void handleMessage(android.os.Message msg) {
             switch(msg.what){
                 case UPDATE_TODAY_WEATHER:
-                    updateTodayWeather((TodayWeather)msg.obj);
+                    try {
+                        updateTodayWeather((TodayWeather)msg.obj);
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
                     break;
                 default:
                     break;
@@ -58,8 +68,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.weather_info);
+
+        Log.d(TAG, "MainActivity->OnCreate");
+
         mUpdateBtn = (ImageView)findViewById(R.id.title_update_btn);
         mUpdateBtn.setOnClickListener(this);
+
+        mCitySelect = (ImageView)findViewById(R.id.title_city_manager);
+        mCitySelect.setOnClickListener(this);
 
         // 调用initView初始化界面
         initView();
@@ -106,6 +122,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Toast.makeText(MainActivity.this, "网络挂了", Toast.LENGTH_LONG).show();
             }
             queryWeatherCode(cityCode);
+        }
+        else if (view.getId() == R.id.title_city_manager) {
+            Intent i = new Intent(this, SelectCity.class);
+            startActivity(i);
         }
     }
 
@@ -303,11 +323,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     // 更新天气
-    void updateTodayWeather (TodayWeather todayWeather){
+    void updateTodayWeather (TodayWeather todayWeather) throws UnsupportedEncodingException {
         Log.d("myapp3", todayWeather.toString());
 
         cityTv.setText(todayWeather.getCity());
-        timeTv.setText(todayWeather.getUpdatetime() + "发布");
+        timeTv.setText(todayWeather.getUpdatetime() + URLDecoder.decode("发布", "UTF-8"));
         humidityTv.setText("湿度:" + todayWeather.getShidu());
         weekTv.setText(todayWeather.getDate());
         pmDataTv.setText(todayWeather.getPm25());
