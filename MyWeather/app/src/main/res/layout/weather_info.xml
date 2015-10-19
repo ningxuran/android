@@ -100,13 +100,27 @@
                 android:textColor="@android:color/white"
                 android:textSize="15.0sp"/>
 
+            <!-- 温度信息 -->
+            <TextView
+                android:id="@+id/cur_temperature"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@id/time"
+                android:layout_marginLeft="15.0dip"
+                android:singleLine="true"
+                android:text="温度13℃"
+                android:textColor="@android:color/white"
+                android:textSize="15.0sp"
+                />
+
             <!-- 湿度信息 -->
             <TextView
                 android:id="@+id/humidity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:layout_below="@id/time"
+                android:layout_below="@id/cur_temperature"
                 android:layout_marginLeft="15.0dip"
                 android:singleLine="true"
                 android:text="湿度57%"

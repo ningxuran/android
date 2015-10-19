@@ -1,7 +1,10 @@
 package pku.ss.ningxuran.app;
 
+import android.app.Activity;
 import android.app.Application;
+import android.content.Intent;
 import android.os.Environment;
+import android.os.Parcelable;
 import android.util.Log;
 import android.widget.ListView;
 
@@ -10,12 +13,14 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import pku.ss.ningxuran.bean.City;
 import pku.ss.ningxuran.db.CityDB;
 import pku.ss.ningxuran.myweather.R;
+import pku.ss.ningxuran.myweather.SelectCity;
 
 /**
  * Created by ningxuran on 15/10/17.
@@ -93,10 +98,17 @@ public class MyApplication extends Application {
 
     private boolean prepareCityList (){
         mCityList = mCityDB.getAllCity();
+        List<String> cityNameList = new ArrayList<>();
         for(City city: mCityList) {
             String cityName = city.getCity();
+            cityNameList.add(cityName);
             Log.d(TAG, cityName);
         }
+
+//        Intent intent = new Intent(this,SelectCity.class);
+//        intent.putStringArrayListExtra("cityNameList", (ArrayList<String>) cityNameList);
+//        startActivity(intent);
+
         return true;
     }
 }

@@ -1,6 +1,7 @@
 package pku.ss.ningxuran.myweather;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +29,7 @@ public class SelectCity extends Activity implements View.OnClickListener{
 
     private ImageView mBackBtn;
     private ListView mListView;
-    private String[] data = {"1","2","3","4"};
+    private String[] data={"1","2","3"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +40,9 @@ public class SelectCity extends Activity implements View.OnClickListener{
         mBackBtn.setOnClickListener(this);
 
         mListView = (ListView)findViewById(R.id.list_view);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+//        Log.d("select city", String.valueOf(data));
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 SelectCity.this, android.R.layout.simple_list_item_1, data);
         mListView.setAdapter(adapter);
     }

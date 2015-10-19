@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     private TextView cityTv, timeTv, humidityTv,weekTv,pmDataTv, pmQualityTv, tempertureTv,
-            climateTv, windTv;
+            climateTv, windTv,cur_temperature;
     private ImageView weatherImg, pmImg;
 
     // 定义主线程的 handler
@@ -310,6 +310,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         climateTv = (TextView) findViewById(R.id.climate);
         windTv = (TextView) findViewById(R.id.wind);
         weatherImg = (ImageView) findViewById(R.id.weather_img);
+        cur_temperature = (TextView) findViewById(R.id.cur_temperature);
 
         cityTv.setText("N/A");
         timeTv.setText("N/A");
@@ -320,11 +321,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tempertureTv.setText("N/A");
         climateTv.setText("N/A");
         windTv.setText("N/A");
+        cur_temperature.setText("N/A");
     }
 
     // 更新天气
     void updateTodayWeather (TodayWeather todayWeather) throws UnsupportedEncodingException {
         Log.d("myapp3", todayWeather.toString());
+        Integer pm25 = Integer.valueOf(todayWeather.getPm25());
 
         cityTv.setText(todayWeather.getCity());
         timeTv.setText(todayWeather.getUpdatetime() + URLDecoder.decode("发布", "UTF-8"));
@@ -335,6 +338,88 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tempertureTv.setText(todayWeather.getLow() + "~" + todayWeather.getHigh());
         climateTv.setText(todayWeather.getType());
         windTv.setText("风力:" + todayWeather.getFengli());
+        cur_temperature.setText("温度:" + todayWeather.getWendu() + "℃");
+        switch(todayWeather.getType()){
+            case "晴":
+                weatherImg.setImageResource(R.drawable.biz_plugin_weather_qing);
+                break;
+            case "暴雪":
+                weatherImg.setImageResource(R.drawable.biz_plugin_weather_baoxue);
+                break;
+            case "暴雨":
+                weatherImg.setImageResource(R.drawable.biz_plugin_weather_baoyu);
+                break;
+            case "大暴雨":
+                weatherImg.setImageResource(R.drawable.biz_plugin_weather_dabaoyu);
+                break;
+            case "大雪":
+                weatherImg.setImageResource(R.drawable.biz_plugin_weather_daxue);
+                break;
+            case "大雨":
+                weatherImg.setImageResource(R.drawable.biz_plugin_weather_dayu);
+                break;
+            case "多云":
+                weatherImg.setImageResource(R.drawable.biz_plugin_weather_duoyun);
+                break;
+            case "雷阵雨":
+                weatherImg.setImageResource(R.drawable.biz_plugin_weather_leizhenyu);
+                break;
+            case "雷阵雨冰雹":
+                weatherImg.setImageResource(R.drawable.biz_plugin_weather_leizhenyubingbao);
+                break;
+            case "沙尘暴":
+                weatherImg.setImageResource(R.drawable.biz_plugin_weather_shachenbao);
+                break;
+            case "雾":
+                weatherImg.setImageResource(R.drawable.biz_plugin_weather_wu);
+                break;
+            case "小雪":
+                weatherImg.setImageResource(R.drawable.biz_plugin_weather_xiaoxue);
+                break;
+            case "小雨":
+                weatherImg.setImageResource(R.drawable.biz_plugin_weather_xiaoyu);
+                break;
+            case "阴":
+                weatherImg.setImageResource(R.drawable.biz_plugin_weather_yin);
+                break;
+            case "雨夹雪":
+                weatherImg.setImageResource(R.drawable.biz_plugin_weather_yujiaxue);
+                break;
+            case "特大暴雨":
+                weatherImg.setImageResource(R.drawable.biz_plugin_weather_tedabaoyu);
+                break;
+            case "阵雪":
+                weatherImg.setImageResource(R.drawable.biz_plugin_weather_zhenxue);
+                break;
+            case "阵雨":
+                weatherImg.setImageResource(R.drawable.biz_plugin_weather_zhenyu);
+                break;
+            case "中雪":
+                weatherImg.setImageResource(R.drawable.biz_plugin_weather_zhongxue);
+                break;
+            case "中雨":
+                weatherImg.setImageResource(R.drawable.biz_plugin_weather_zhongyu);
+                break;
+        }
+
+        if (pm25 >= 1 && pm25 <= 50) {
+            pmImg.setImageResource(R.drawable.biz_plugin_weather_0_50);
+        }
+        else if (pm25 >= 51 && pm25 <=100) {
+            pmImg.setImageResource(R.drawable.biz_plugin_weather_51_100);
+        }
+        else if (pm25 >= 101 && pm25 <=150) {
+            pmImg.setImageResource(R.drawable.biz_plugin_weather_101_150);
+        }
+        else if (pm25 >= 151 && pm25 <= 200) {
+            pmImg.setImageResource(R.drawable.biz_plugin_weather_151_200);
+        }
+        else if (pm25 >= 200 && pm25 <= 300) {
+            pmImg.setImageResource(R.drawable.biz_plugin_weather_201_300);
+        }
+        else if (pm25 > 300) {
+            pmImg.setImageResource(R.drawable.biz_plugin_weather_greater_300);
+        }
 
         Toast.makeText(MainActivity.this, "更新成功！", Toast.LENGTH_LONG).show();
 
